@@ -1,0 +1,47 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1 style="font-size: larger;">User Information</h1>
+    <p id="demo"></p>
+
+    <button id="fetch_btn" onclick="fetch_data()">Display data on click</button>
+    <script>
+       function displayUserInfo(some){
+        document.getElementById("demo").innerHTML=some;
+       }
+       const myRequest=(url)=>{
+        return new Promise((resolve,reject)=>{
+            var xhr=new XMLHttpRequest();
+            console.log(xhr);
+            xhr.open("GET",url);
+            xhr.onload=function()
+            {
+                var myObj=JSON.parse(xhr.responseText);
+                var dataLength=myObj.length;
+                mydata="<table border='1'><tr><td>Name</td><td>Email</td><td>city</td>"
+                for (let index = 0; index < dataLength; index++) 
+                {
+                var username=myObj[index].name;
+                var useremail=myObj[index].email;
+                var usercity=myObj[index].address.city;
+                mydata=mydata+"<tr><td>"+username+"</td><td>"+useremail+"</td><td>"+usercity+"</td>"
+                }
+                mydata=mydata+"</table>";
+                displayUserInfo(mydata)
+            }
+            xhr.send();
+            xhr.catch((error) => {
+             console.error('Error:', error);
+             });
+        });
+       };
+       const fetch_data = () =>{
+         myRequest("https://jsonplaceholder.typicode.com/users/");
+       }
+    </script>
+</body>
+</html>
